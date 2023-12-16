@@ -6,7 +6,6 @@ import {
   CssBaseline,
 } from "@mui/material";
 import React from "react";
-import "./App.css";
 import AllDayStats from "./Stats/DailyStats/AllDayStats";
 import Leaderboard from "./Stats/Leaderboard/Leaderboard";
 import { theme } from "./Stats/theme";

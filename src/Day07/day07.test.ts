@@ -1,5 +1,4 @@
 import { textReaderArr } from "../utils/textReader";
-import { triggerSendSolution } from "../utils/triggerScripts";
 import { solveStar1, solveStar2 } from "./day07";
 
 const DAY = Number(

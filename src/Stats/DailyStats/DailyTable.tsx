@@ -4,7 +4,6 @@ import { ApiMember } from "../apiType";
 import ScoreTable, { ScoreBoardType } from "./ScoreTable";
 
 import { useAdventOfCodeJson } from "../useLocalStorage";
-import { useGetStatsQuery } from "../api";
 
 interface IProps<MappedType> {
   heading: React.ReactNode;

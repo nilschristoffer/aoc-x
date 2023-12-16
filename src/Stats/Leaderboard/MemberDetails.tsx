@@ -18,14 +18,11 @@ import { ApiMember } from "../apiType";
 import {
   lengthInTimeFromSeconds,
   localTimeFromSeconds,
-  membersWithAccumulatedScorePerDayWithRank,
   scoreByDay,
 } from "../helpers";
 import { useAdventOfCodeJson } from "../useLocalStorage";
-import { send } from "process";
-import { useGetStatsQuery } from "../api";
+
 import { BarChart } from "@mui/x-charts";
-import { get } from "http";
 
 interface IMemberDetailsProps {
   member: ApiMember;
