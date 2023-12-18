@@ -4,13 +4,15 @@ import {
   Button,
   Dialog,
   DialogContent,
+  DialogContentText,
   DialogTitle,
+  IconButton,
   Stack,
   TextField,
 } from "@mui/material";
 import { ApiLeaderboard } from "../apiType";
 import { useAdventOfCodeJson } from "../AdventOfCodeContext";
-import { DataObject } from "@mui/icons-material";
+import { ContentCopy, CopyAll, DataObject } from "@mui/icons-material";
 
 const verifiedJSONData = (jsonData: string) => {
   try {
@@ -67,10 +69,16 @@ const DataModal: React.FunctionComponent = () => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         maxWidth="lg"
+        fullWidth
       >
         <DialogTitle>Klistra in JSON</DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
+            <DialogContentText>
+              {
+                "https://adventofcode.com/2023/leaderboard/private/view/{id}.json"
+              }
+            </DialogContentText>
             <TextField
               value={jsonData}
               onChange={handleChange}

@@ -6,8 +6,8 @@ import { Stack } from "@mui/material";
 const AllDayStats: React.FunctionComponent = () => {
   const { dailyScores } = useAdventOfCodeJson();
 
-  if (!dailyScores) {
-    return <p>Kan inte ladda leaderboard</p>;
+  if (!dailyScores || !Object.keys(dailyScores).length) {
+    return <p>Ingen data...</p>;
   }
   const allDays = Array.from(Array(25).keys()).map((day) => day + 1);
 
