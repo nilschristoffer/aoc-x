@@ -33,7 +33,11 @@ const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
     .map((p) => p.member.name);
 
   return (
-    <Accordion expanded={isExpanded} TransitionProps={{ mountOnEnter: true }}>
+    <Accordion
+      expanded={isExpanded}
+      TransitionProps={{ mountOnEnter: true }}
+      disabled={!dayScore.part1.length}
+    >
       <AccordionSummary onClick={handleClick}>
         <Stack direction="row" spacing={2} alignItems="center">
           <Typography>Day {day}</Typography>
