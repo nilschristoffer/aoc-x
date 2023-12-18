@@ -6,7 +6,6 @@ export const localTimeFromSeconds = (seconds: number, referenceDate: Date) => {
   const daysAfter = Math.floor(
     (date.getTime() - referenceDate.getTime()) / (1000 * 60 * 60 * 24)
   );
-  console.log(daysAfter, date.toLocaleString(), referenceDate.toLocaleString());
   return (daysAfter > 0 ? ` +${daysAfter}d:` : "") + date.toLocaleTimeString();
 };
 
