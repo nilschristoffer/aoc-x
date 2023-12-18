@@ -12,20 +12,15 @@ import {
   TableBody,
   Paper,
 } from "@mui/material";
-import { Star, Public } from "@mui/icons-material";
+import { Star, Public, StarOutline } from "@mui/icons-material";
 import React from "react";
-import { ApiMember } from "../apiType";
-import {
-  lengthInTimeFromSeconds,
-  localTimeFromSeconds,
-  scoreByDay,
-} from "../helpers";
-import { useAdventOfCodeJson } from "../useLocalStorage";
+import { lengthInTimeFromSeconds, localTimeFromSeconds } from "../helpers";
+import { Member } from "../AdventOfCodeContext";
 
 import { BarChart } from "@mui/x-charts";
 
 interface IMemberDetailsProps {
-  member: ApiMember;
+  member: Member;
 }
 
 const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
@@ -33,15 +28,11 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
 }) => {
   const stars = new Date().getDate() * 2;
 
-  const { leaderboard } = useAdventOfCodeJson();
-
-  if (!leaderboard?.members) return null;
-
   return (
     <List>
       <ListItem>
         <ListItemAvatar>
-          <Avatar>
+          <Avatar sx={{ bgcolor: (t) => t.palette.primary.main }}>
             <Star />
           </Avatar>
         </ListItemAvatar>
@@ -52,14 +43,11 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
       </ListItem>
       <ListItem>
         <ListItemAvatar>
-          <Avatar>
+          <Avatar sx={{ bgcolor: (t) => t.palette.primary.main }}>
             <Public />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText
-          primary={member.global_score}
-          secondary={"Global poäng"}
-        />
+        <ListItemText primary={member.globalScore} secondary={"Global poäng"} />
       </ListItem>
       <ListItem>
         <TableContainer component={Paper}>
@@ -67,46 +55,43 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
             <TableHead>
               <TableRow>
                 <TableCell>Dag</TableCell>
-                <TableCell>Tid 1 (rank)</TableCell>
-                <TableCell>Tid 2 (rank)</TableCell>
-                <TableCell>Diff</TableCell>
-                <TableCell>Poäng</TableCell>
-                <TableCell>Poäng Acc</TableCell>
-                <TableCell>Rank</TableCell>
+                <TableCell>
+                  <Star color="primary" />
+                  <StarOutline color="primary" />
+                </TableCell>
+                <TableCell>
+                  <StarOutline color="primary" />
+                  <Star color="primary" />
+                </TableCell>
+                <TableCell>
+                  <Star color="primary" />
+                  <Star color="primary" />
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {member.completion_day_level &&
-                Object.keys(member.completion_day_level).map((day) => {
-                  const dayData = member.completion_day_level[day];
-                  const part1 = dayData["1"];
-                  const part2 = dayData["2"];
-                  const { firstStarPoints, secondStarPoints } = scoreByDay(
-                    leaderboard.members,
-                    parseInt(day),
-                    member
-                  );
+              {member.dailyResults &&
+                Object.keys(member.dailyResults).map((day) => {
+                  const { part1, part2 } = member.dailyResults[Number(day)];
 
                   return (
                     <TableRow key={day}>
                       <TableCell>{day}</TableCell>
                       <TableCell>
-                        {part1?.get_star_ts
-                          ? localTimeFromSeconds(part1.get_star_ts, day) +
-                            ` (${firstStarPoints})`
+                        {part1?.time
+                          ? localTimeFromSeconds(part1.time, day) +
+                            ` (${part1.score}p, ${part1.rank})`
                           : "-"}
                       </TableCell>
                       <TableCell>
-                        {part2?.get_star_ts
-                          ? localTimeFromSeconds(part2.get_star_ts, day) +
-                            ` (${secondStarPoints})`
+                        {part1?.time && part2?.time
+                          ? lengthInTimeFromSeconds(part2.time - part1.time)
                           : "-"}
                       </TableCell>
                       <TableCell>
-                        {part1?.get_star_ts && part2?.get_star_ts
-                          ? lengthInTimeFromSeconds(
-                              part2.get_star_ts - part1.get_star_ts
-                            )
+                        {part2?.time
+                          ? localTimeFromSeconds(part2.time, day) +
+                            ` (${part2.score}p, ${part2.rank})`
                           : "-"}
                       </TableCell>
                     </TableRow>
@@ -123,31 +108,25 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
           xAxis={[
             {
               scaleType: "band",
-              data: member.completion_day_level
-                ? Object.keys(member.completion_day_level).map(
-                    (day) => "Day " + day
-                  )
+              data: member.dailyResults
+                ? Object.keys(member.dailyResults).map((day) => "Day " + day)
                 : [],
             },
           ]}
           series={[
             {
               label: "1st star",
-              data: member.completion_day_level
-                ? Object.keys(member.completion_day_level).map(
-                    (day) =>
-                      scoreByDay(leaderboard.members, parseInt(day), member)
-                        .firstStarPoints
+              data: member.dailyResults
+                ? Object.keys(member.dailyResults).map(
+                    (day) => member.dailyResults[Number(day)]?.part1?.score ?? 0
                   )
                 : [],
             },
             {
               label: "2nd star",
-              data: member.completion_day_level
-                ? Object.keys(member.completion_day_level).map(
-                    (day) =>
-                      scoreByDay(leaderboard.members, parseInt(day), member)
-                        .secondStarPoints
+              data: member.dailyResults
+                ? Object.keys(member.dailyResults).map(
+                    (day) => member.dailyResults[Number(day)]?.part2?.score ?? 0
                   )
                 : [],
             },

@@ -1,48 +1,32 @@
-import { Paper, Stack, Typography } from "@mui/material";
+import { IconButton, Paper, Stack, Typography } from "@mui/material";
 import React from "react";
-import { ApiMember } from "../apiType";
-import ScoreTable, { ScoreBoardType } from "./ScoreTable";
+import ScoreTable from "./ScoreTable";
 
-import { useAdventOfCodeJson } from "../useLocalStorage";
+import { PartScore } from "../AdventOfCodeContext";
+import { ExpandMore } from "@mui/icons-material";
 
-interface IProps<MappedType> {
+interface IProps {
+  data: PartScore[];
+  timeConverter?: (time_ts: number) => string;
   heading: React.ReactNode;
-  day: number;
-  sort: (day: number) => (a: ApiMember, b: ApiMember) => number;
-  map: (member: ApiMember, index: number) => MappedType;
-  top?: number;
-  tableHeaders: { [key in keyof MappedType]: string };
-  tableHeaderOrder: (keyof MappedType)[];
 }
 
-const DailyTable = <T extends ScoreBoardType>({
-  day,
-  sort,
-  map,
-  heading,
-  top = 10,
-  tableHeaderOrder,
-  tableHeaders,
-}: IProps<T>) => {
-  const { leaderboard } = useAdventOfCodeJson();
+const DailyTable = ({ data, timeConverter, heading }: IProps) => {
+  const [top, setTop] = React.useState(10);
 
-  if (!leaderboard?.members) {
-    return null;
-  }
-
-  const membersList = Object.values(leaderboard.members) as ApiMember[];
-
-  const topMembers = [...membersList].sort(sort(day)).slice(0, top).map(map);
+  const topMembers = data.slice(0, top);
 
   return (
-    <Paper sx={{ p: 1 }}>
-      <Stack spacing={1}>
-        <Typography variant="h6">{heading}</Typography>
-        <ScoreTable
-          data={topMembers}
-          headerOrder={tableHeaderOrder}
-          headers={tableHeaders}
-        />
+    <Paper sx={{ p: 1 }} variant="outlined">
+      <Stack spacing={1} alignItems="center">
+        <Typography>{heading}</Typography>
+        <ScoreTable data={topMembers} timeConverter={timeConverter} />
+        <IconButton
+          onClick={() => setTop((prev) => prev + 10)}
+          disabled={top >= data.length}
+        >
+          <ExpandMore />
+        </IconButton>
       </Stack>
     </Paper>
   );

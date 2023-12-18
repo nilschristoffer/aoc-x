@@ -2,14 +2,24 @@ import { createTheme } from "@mui/material";
 
 export const theme = createTheme({
   palette: {
+    // darkMode
+    mode: "dark",
     primary: {
-      main: "#0f0f23",
+      main: "#ffff66",
     },
     secondary: {
-      main: "#f5f5f5",
+      main: "#009900",
     },
     background: {
-      default: "#ddd",
+      default: "#0f0f23",
+      paper: "#0f0f23",
     },
+    text: {
+      primary: "#ccc",
+      secondary: "#ccc",
+    },
+  },
+  typography: {
+    fontFamily: ["Roboto Mono", "monospace"].join(","),
   },
 });

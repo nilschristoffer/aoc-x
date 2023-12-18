@@ -9,7 +9,8 @@ import {
   TextField,
 } from "@mui/material";
 import { ApiLeaderboard } from "../apiType";
-import { useAdventOfCodeJson } from "../useLocalStorage";
+import { useAdventOfCodeJson } from "../AdventOfCodeContext";
+import { DataObject } from "@mui/icons-material";
 
 const verifiedJSONData = (jsonData: string) => {
   try {
@@ -51,13 +52,21 @@ const DataModal: React.FunctionComponent = () => {
 
   return (
     <>
-      <Button onClick={handleOpen}>Open data modal</Button>
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={handleOpen}
+        startIcon={<DataObject />}
+        sx={{ borderRadius: 0 }}
+      >
+        Importera JSON
+      </Button>
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-        maxWidth="md"
+        maxWidth="lg"
       >
         <DialogTitle>Klistra in JSON</DialogTitle>
         <DialogContent>

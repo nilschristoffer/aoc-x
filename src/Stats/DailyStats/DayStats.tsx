@@ -2,100 +2,97 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Grid,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Star, StarBorder } from "@mui/icons-material";
 import React from "react";
-import {
-  fastestFirstStar,
-  fastestFromFirstStarToSecondsStar,
-  fastestSecondStar,
-  lengthInTimeFromSeconds,
-  localTimeFromSeconds,
-  timeFromFirstStarToSecondStar,
-} from "../helpers";
+import { lengthInTimeFromSeconds, localTimeFromSeconds } from "../helpers";
 import DailyTable from "./DailyTable";
+import { DayScore } from "../AdventOfCodeContext";
 
 interface IProps {
-  day: number;
+  day: string;
+  dayScore: DayScore;
 }
 
-const DayStats: React.FC<IProps> = ({ day }) => {
+const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
 
   const handleClick = () => {
     setIsExpanded((prev) => !prev);
   };
+
+  const countPart2Completions = dayScore.part2.map((p) => p.member.name);
+  const countOnlyPart1Completions = dayScore.part1
+    .filter(
+      (p) => !dayScore.part2.map((p) => p.member.id).includes(p.member.id)
+    )
+    .map((p) => p.member.name);
+
   return (
-    <Accordion expanded={isExpanded} sx={{ backgroundColor: "#eee" }}>
+    <Accordion expanded={isExpanded} TransitionProps={{ mountOnEnter: true }}>
       <AccordionSummary onClick={handleClick}>
-        <Typography variant="h5">Dag {day}</Typography>
+        <Stack direction="row" spacing={0} alignItems="center">
+          <Typography sx={{ mr: 2 }}>Dag {day}</Typography>
+          {countPart2Completions.map((i) => (
+            <Tooltip key={i} title={i}>
+              <Star fontSize="small" color="primary" />
+            </Tooltip>
+          ))}
+          {countOnlyPart1Completions.map((i) => (
+            <Tooltip key={i} title={i}>
+              <Star fontSize="small" color="inherit" />
+            </Tooltip>
+          ))}
+        </Stack>
       </AccordionSummary>
       <AccordionDetails>
-        <Stack spacing={2} direction={{ md: "row" }}>
-          <DailyTable
-            heading={
-              <>
-                <Star />
-                <StarBorder />
-              </>
-            }
-            day={day}
-            sort={fastestFirstStar}
-            map={(member, index) => ({
-              rank: index + 1,
-              name: member.name ?? "???",
-              time: localTimeFromSeconds(
-                member.completion_day_level[day]?.[1]?.get_star_ts,
-                day.toString()
-              ),
-            })}
-            tableHeaderOrder={["rank", "name", "time"]}
-            tableHeaders={{ rank: "Rank", name: "Namn", time: "Klocka" }}
-          />
-
-          <DailyTable
-            heading={
-              <>
-                <StarBorder />
-                <Star />
-              </>
-            }
-            day={day}
-            sort={fastestFromFirstStarToSecondsStar}
-            map={(member, index) => ({
-              rank: index + 1,
-              name: member.name ?? "???",
-              time:
-                lengthInTimeFromSeconds(
-                  timeFromFirstStarToSecondStar(day)(member) ?? Number.NaN
-                ) ?? "-",
-            })}
-            tableHeaderOrder={["rank", "name", "time"]}
-            tableHeaders={{ rank: "Rank", name: "Namn", time: "Tid" }}
-          />
-          <DailyTable
-            heading={
-              <>
-                <Star />
-                <Star />
-              </>
-            }
-            day={day}
-            sort={fastestSecondStar}
-            map={(member, index) => ({
-              rank: index + 1,
-              name: member.name ?? "???",
-              time: localTimeFromSeconds(
-                member.completion_day_level[day]?.[2]?.get_star_ts,
-                day.toString()
-              ),
-            })}
-            tableHeaderOrder={["rank", "name", "time"]}
-            tableHeaders={{ rank: "Rank", name: "Namn", time: "Klocka" }}
-          />
-        </Stack>
+        <Grid
+          container
+          columns={{ xs: 1, md: 3 }}
+          spacing={2}
+          direction={{ md: "row" }}
+        >
+          <Grid item xs={1}>
+            <DailyTable
+              data={dayScore.part1}
+              timeConverter={(t) => localTimeFromSeconds(t, day)}
+              heading={
+                <>
+                  <Star color="primary" />
+                  <StarBorder color="primary" />
+                </>
+              }
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <DailyTable
+              data={dayScore.diff}
+              timeConverter={(t) => lengthInTimeFromSeconds(t)}
+              heading={
+                <>
+                  <StarBorder color="primary" />
+                  <Star color="primary" />
+                </>
+              }
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <DailyTable
+              data={dayScore.part2}
+              timeConverter={(t) => localTimeFromSeconds(t, day)}
+              heading={
+                <>
+                  <Star color="primary" />
+                  <Star color="primary" />
+                </>
+              }
+            />
+          </Grid>
+        </Grid>
       </AccordionDetails>
     </Accordion>
   );
