@@ -7,7 +7,10 @@ import React, {
 } from "react";
 import { ApiLeaderboard } from "./apiType";
 
-export const useLocalStorage = <T,>(key: string, initialValue?: T) => {
+export const useLocalStorage = <T,>(
+  key: string,
+  initialValue: T | undefined = undefined
+) => {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
@@ -215,7 +218,7 @@ export const AdventOfCodeContextProvider: React.FunctionComponent<
   PropsWithChildren
 > = ({ children }) => {
   const [leaderboard, setLeaderboard] = useLocalStorage<ApiLeaderboard | null>(
-    "aoc22-leaderboard"
+    "aoc-private-leaderboard-stats"
   );
 
   const memberScorePerDay = useMemo(
