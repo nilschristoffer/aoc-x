@@ -14,7 +14,11 @@ import {
 } from "@mui/material";
 import { Star, Public, StarOutline } from "@mui/icons-material";
 import React from "react";
-import { lengthInTimeFromSeconds, localTimeFromSeconds } from "../helpers";
+import {
+  getOrderSuffix,
+  lengthInTimeFromSeconds,
+  localTimeFromSeconds,
+} from "../helpers";
 import { Member } from "../AdventOfCodeContext";
 
 import { BarChart } from "@mui/x-charts";
@@ -73,20 +77,62 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
                   return (
                     <TableRow key={day}>
                       <TableCell>{day}</TableCell>
-                      <TableCell>
+                      <TableCell
+                        sx={{
+                          color:
+                            part1?.rank === 1
+                              ? "primary.main"
+                              : part1.time
+                              ? "inherit"
+                              : "text.disabled",
+                          textShadow: part1?.rank === 1 ? "0 0 5px" : "",
+                        }}
+                      >
                         {part1?.time
-                          ? localTimeFromSeconds(part1.time, releaseDate) +
-                            ` (${part1.score}p, ${part1.rank})`
-                          : "-"}
+                          ? `${localTimeFromSeconds(
+                              part1.time,
+                              releaseDate
+                            )} | ${
+                              part1.rank ? getOrderSuffix(part1.rank) : ""
+                            }`
+                          : "Not completed"}
                       </TableCell>
-                      <TableCell>
-                        {diff.time ? lengthInTimeFromSeconds(diff.time) : "-"}
+                      <TableCell
+                        sx={{
+                          color:
+                            diff?.rank === 1
+                              ? "primary.main"
+                              : diff.time
+                              ? "inherit"
+                              : "text.disabled",
+                          textShadow: diff?.rank === 1 ? "0 0 5px" : "",
+                        }}
+                      >
+                        {diff.time
+                          ? `${lengthInTimeFromSeconds(diff.time)} | ${
+                              diff.rank ? getOrderSuffix(diff.rank) : ""
+                            }`
+                          : "Not completed"}
                       </TableCell>
-                      <TableCell>
+                      <TableCell
+                        sx={{
+                          color:
+                            part2?.rank === 1
+                              ? "primary.main"
+                              : part2.time
+                              ? "inherit"
+                              : "text.disabled",
+                          textShadow: part2?.rank === 1 ? "0 0 5px" : "",
+                        }}
+                      >
                         {part2?.time
-                          ? localTimeFromSeconds(part2.time, releaseDate) +
-                            ` (${part2.score}p, ${part2.rank})`
-                          : "-"}
+                          ? `${localTimeFromSeconds(
+                              part2.time,
+                              releaseDate
+                            )} | ${
+                              part2.rank ? getOrderSuffix(part2.rank) : ""
+                            }`
+                          : "Not completed"}
                       </TableCell>
                     </TableRow>
                   );
