@@ -26,8 +26,6 @@ interface IMemberDetailsProps {
 const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
   member,
 }) => {
-  const stars = new Date().getDate() * 2;
-
   return (
     <List>
       <ListItem>
@@ -36,10 +34,7 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
             <Star />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText
-          primary={`${member.stars} av ${stars}`}
-          secondary={"Antal stjärnor"}
-        />
+        <ListItemText primary={member.stars} secondary={"Stars collected"} />
       </ListItem>
       <ListItem>
         <ListItemAvatar>
@@ -47,14 +42,14 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
             <Public />
           </Avatar>
         </ListItemAvatar>
-        <ListItemText primary={member.globalScore} secondary={"Global poäng"} />
+        <ListItemText primary={member.globalScore} secondary={"Global score"} />
       </ListItem>
       <ListItem>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Dag</TableCell>
+                <TableCell>Day</TableCell>
                 <TableCell>
                   <Star color="primary" />
                   <StarOutline color="primary" />

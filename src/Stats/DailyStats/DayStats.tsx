@@ -36,7 +36,7 @@ const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
     <Accordion expanded={isExpanded} TransitionProps={{ mountOnEnter: true }}>
       <AccordionSummary onClick={handleClick}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Typography>Dag {day}</Typography>
+          <Typography>Day {day}</Typography>
           <Stack direction="row" spacing={0} flexWrap="wrap">
             {countPart2Completions.map((i) => (
               <Tooltip key={i} title={i}>

@@ -9,7 +9,7 @@ const Leaderboard: React.FunctionComponent = () => {
   const [top, setTop] = React.useState(10);
 
   if (!members.length) {
-    return <p>Ingen data...</p>;
+    return <p>No data found...</p>;
   }
 
   return (
@@ -22,7 +22,7 @@ const Leaderboard: React.FunctionComponent = () => {
         disabled={top >= members.length}
         sx={{ mt: 1 }}
       >
-        Visa fler
+        Show more
       </Button>
     </Stack>
   );

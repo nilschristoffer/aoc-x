@@ -49,7 +49,7 @@ const MemberCard: React.FunctionComponent<IMemberCardProps> = ({
         </Typography>
         <Stack direction="row" spacing={0} alignItems="center" flexWrap="wrap">
           {Array.from({ length: 25 }, (_, i) => i + 1).map((day) => (
-            <Tooltip key={day} title={`Dag ${day}`}>
+            <Tooltip key={day} title={`Day ${day}`}>
               {secondStarDays[day - 1] ? (
                 <Star fontSize="small" color="primary" />
               ) : firstStarDays[day - 1] ? (

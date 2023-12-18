@@ -7,7 +7,7 @@ const AllDayStats: React.FunctionComponent = () => {
   const { dailyScores, year } = useAdventOfCodeJson();
 
   if (!dailyScores || !Object.keys(dailyScores).length) {
-    return <p>Ingen data...</p>;
+    return <p>No data found...</p>;
   }
   const allDays = Array.from(Array(25).keys()).map((day) => day + 1);
 

@@ -22,14 +22,14 @@ const Home: React.FunctionComponent = () => {
         <Tabs value={tab}>
           <Tab
             value={0}
-            label="Topplista"
+            label="Leaderboard"
             onClick={() => setTab(0)}
             icon={<LeaderboardSharp />}
             iconPosition="start"
           />
           <Tab
             value={1}
-            label="Dagar"
+            label="Days"
             onClick={() => setTab(1)}
             icon={<CalendarTodaySharp />}
             iconPosition="start"

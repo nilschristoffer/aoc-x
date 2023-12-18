@@ -18,8 +18,8 @@ const ScoreTable = ({ data, timeConverter = (t) => t.toString() }: IProps) => {
       <TableHead>
         <TableRow>
           <TableCell>#</TableCell>
-          <TableCell>Namn</TableCell>
-          <TableCell>Tid</TableCell>
+          <TableCell>Name</TableCell>
+          <TableCell>Time</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

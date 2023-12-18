@@ -61,7 +61,7 @@ const DataModal: React.FunctionComponent = () => {
         startIcon={<DataObject />}
         sx={{ borderRadius: 0 }}
       >
-        Importera JSON
+        Import JSON
       </Button>
       <Dialog
         open={open}
@@ -71,7 +71,7 @@ const DataModal: React.FunctionComponent = () => {
         maxWidth="lg"
         fullWidth
       >
-        <DialogTitle>Klistra in JSON</DialogTitle>
+        <DialogTitle>Paste JSON</DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
             <DialogContentText sx={{ wordBreak: "break-word" }}>
@@ -91,7 +91,7 @@ const DataModal: React.FunctionComponent = () => {
               margin="normal"
             ></TextField>
             <Button onClick={onSubmit} color="primary" fullWidth>
-              LADDA
+              LOAD
             </Button>
           </Stack>
         </DialogContent>
