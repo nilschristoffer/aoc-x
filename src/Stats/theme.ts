@@ -20,6 +20,9 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: ["Roboto Mono", "monospace"].join(","),
+    fontFamily: ["Source Code Pro", "monospace"].join(","),
+  },
+  shape: {
+    borderRadius: 0,
   },
 });
