@@ -74,7 +74,7 @@ const DataModal: React.FunctionComponent = () => {
         <DialogTitle>Klistra in JSON</DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
-            <DialogContentText>
+            <DialogContentText sx={{ wordBreak: "break-word" }}>
               {
                 "https://adventofcode.com/2023/leaderboard/private/view/{id}.json"
               }
