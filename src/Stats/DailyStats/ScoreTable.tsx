@@ -15,7 +15,13 @@ interface IProps {
 const ScoreTable = ({ data, timeConverter = (t) => t.toString() }: IProps) => {
   return (
     <Table size="small">
-      <TableHead></TableHead>
+      <TableHead>
+        <TableRow>
+          <TableCell>#</TableCell>
+          <TableCell>Namn</TableCell>
+          <TableCell>Tid</TableCell>
+        </TableRow>
+      </TableHead>
       <TableBody>
         {data.map((row, i) => (
           <TableRow key={row.member.id} sx={{ width: "100%" }}>
