@@ -6,13 +6,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
   Stack,
   TextField,
 } from "@mui/material";
 import { ApiLeaderboard } from "../apiType";
 import { useAdventOfCodeJson } from "../AdventOfCodeContext";
-import { ContentCopy, CopyAll, DataObject } from "@mui/icons-material";
+import { DataObject } from "@mui/icons-material";
 
 const verifiedJSONData = (jsonData: string) => {
   try {
