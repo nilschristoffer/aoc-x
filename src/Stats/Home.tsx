@@ -11,9 +11,13 @@ const Home: React.FunctionComponent = () => {
 
   return (
     <Stack component={Box} spacing={2} ref={containerRef}>
-      <Typography variant="h1" fontWeight="200">
-        Advent of Code 2023
+      <Typography variant="h3" component="h1">
+        Advent of Code
       </Typography>
+      <Typography variant="subtitle1" component="p">
+        Extended private leaderbaord stats
+      </Typography>
+
       <Stack direction="row" spacing={2} justifyContent="space-between">
         <Tabs value={tab}>
           <Tab
