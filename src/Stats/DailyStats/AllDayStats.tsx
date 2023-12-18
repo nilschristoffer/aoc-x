@@ -1,10 +1,10 @@
 import React from "react";
 import { useAdventOfCodeJson } from "../AdventOfCodeContext";
 import DayStats from "./DayStats";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 const AllDayStats: React.FunctionComponent = () => {
-  const { dailyScores } = useAdventOfCodeJson();
+  const { dailyScores, year } = useAdventOfCodeJson();
 
   if (!dailyScores || !Object.keys(dailyScores).length) {
     return <p>Ingen data...</p>;
@@ -13,6 +13,7 @@ const AllDayStats: React.FunctionComponent = () => {
 
   return (
     <Stack>
+      <Typography gutterBottom>{year}</Typography>
       {allDays.map((day) => (
         <DayStats key={day} day={day.toString()} dayScore={dailyScores[day]} />
       ))}

@@ -60,6 +60,7 @@ const AdventOfCodeContext = createContext<{
   setLeaderboard: (leaderboard: ApiLeaderboard) => void;
   dailyScores: DailyScores;
   members: Member[];
+  year?: number;
 }>({
   leaderboard: null,
   setLeaderboard: () => ({}),
@@ -88,6 +89,8 @@ export const AdventOfCodeContextProvider: React.FunctionComponent<
     [leaderboard]
   );
 
+  const year = leaderboard?.event ? Number(leaderboard?.event) : undefined;
+
   return (
     <AdventOfCodeContext.Provider
       value={{
@@ -95,6 +98,7 @@ export const AdventOfCodeContextProvider: React.FunctionComponent<
         setLeaderboard,
         dailyScores,
         members,
+        year,
       }}
     >
       {children}
