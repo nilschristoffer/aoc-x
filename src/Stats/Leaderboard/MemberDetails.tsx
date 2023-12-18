@@ -11,6 +11,8 @@ import {
   TableCell,
   TableBody,
   Paper,
+  styled,
+  Theme,
 } from "@mui/material";
 import { Star, Public, StarOutline } from "@mui/icons-material";
 import React from "react";
@@ -22,6 +24,17 @@ import {
 import { Member } from "../AdventOfCodeContext";
 
 import { BarChart } from "@mui/x-charts";
+
+const CustomTableCell = styled(TableCell, {
+  shouldForwardProp: (prop) => prop !== "golden",
+})<{ golden: boolean; disabled: boolean }>(({ theme, golden, disabled }) => ({
+  color: golden
+    ? theme.palette.primary.main
+    : disabled
+    ? theme.palette.text.disabled
+    : "inherit",
+  textShadow: golden ? "0 0 5px" : "",
+}));
 
 interface IMemberDetailsProps {
   member: Member;
@@ -77,16 +90,9 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
                   return (
                     <TableRow key={day}>
                       <TableCell>{day}</TableCell>
-                      <TableCell
-                        sx={{
-                          color:
-                            part1?.rank === 1
-                              ? "primary.main"
-                              : part1.time
-                              ? "inherit"
-                              : "text.disabled",
-                          textShadow: part1?.rank === 1 ? "0 0 5px" : "",
-                        }}
+                      <CustomTableCell
+                        golden={part1?.rank === 1}
+                        disabled={!part1?.time}
                       >
                         {part1?.time
                           ? `${localTimeFromSeconds(
@@ -96,34 +102,20 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
                               part1.rank ? getOrderSuffix(part1.rank) : ""
                             }`
                           : "Not completed"}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          color:
-                            diff?.rank === 1
-                              ? "primary.main"
-                              : diff.time
-                              ? "inherit"
-                              : "text.disabled",
-                          textShadow: diff?.rank === 1 ? "0 0 5px" : "",
-                        }}
+                      </CustomTableCell>
+                      <CustomTableCell
+                        golden={diff?.rank === 1}
+                        disabled={!diff?.time}
                       >
                         {diff.time
                           ? `${lengthInTimeFromSeconds(diff.time)} | ${
                               diff.rank ? getOrderSuffix(diff.rank) : ""
                             }`
                           : "Not completed"}
-                      </TableCell>
-                      <TableCell
-                        sx={{
-                          color:
-                            part2?.rank === 1
-                              ? "primary.main"
-                              : part2.time
-                              ? "inherit"
-                              : "text.disabled",
-                          textShadow: part2?.rank === 1 ? "0 0 5px" : "",
-                        }}
+                      </CustomTableCell>
+                      <CustomTableCell
+                        golden={part2?.rank === 1}
+                        disabled={!part2?.time}
                       >
                         {part2?.time
                           ? `${localTimeFromSeconds(
@@ -133,7 +125,7 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
                               part2.rank ? getOrderSuffix(part2.rank) : ""
                             }`
                           : "Not completed"}
-                      </TableCell>
+                      </CustomTableCell>
                     </TableRow>
                   );
                 })}
