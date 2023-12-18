@@ -25,8 +25,8 @@ const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
     setIsExpanded((prev) => !prev);
   };
 
-  const countPart2Completions = dayScore.part2.map((p) => p.member.name);
-  const countOnlyPart1Completions = dayScore.part1
+  const countPart2Completions = dayScore?.part2.map((p) => p.member.name);
+  const countOnlyPart1Completions = dayScore?.part1
     .filter(
       (p) => !dayScore.part2.map((p) => p.member.id).includes(p.member.id)
     )
@@ -35,18 +35,20 @@ const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
   return (
     <Accordion expanded={isExpanded} TransitionProps={{ mountOnEnter: true }}>
       <AccordionSummary onClick={handleClick}>
-        <Stack direction="row" spacing={0} alignItems="center">
+        <Stack direction="row" spacing={2} alignItems="center">
           <Typography sx={{ mr: 2 }}>Dag {day}</Typography>
-          {countPart2Completions.map((i) => (
-            <Tooltip key={i} title={i}>
-              <Star fontSize="small" color="primary" />
-            </Tooltip>
-          ))}
-          {countOnlyPart1Completions.map((i) => (
-            <Tooltip key={i} title={i}>
-              <Star fontSize="small" color="inherit" />
-            </Tooltip>
-          ))}
+          <Stack direction="row" spacing={0} flexWrap="wrap">
+            {countPart2Completions.map((i) => (
+              <Tooltip key={i} title={i}>
+                <Star fontSize="small" color="primary" />
+              </Tooltip>
+            ))}
+            {countOnlyPart1Completions.map((i) => (
+              <Tooltip key={i} title={i}>
+                <Star fontSize="small" color="inherit" />
+              </Tooltip>
+            ))}
+          </Stack>
         </Stack>
       </AccordionSummary>
       <AccordionDetails>
