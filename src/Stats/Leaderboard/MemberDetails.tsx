@@ -72,25 +72,24 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
             <TableBody>
               {member.dailyResults &&
                 Object.keys(member.dailyResults).map((day) => {
-                  const { part1, part2 } = member.dailyResults[Number(day)];
+                  const { part1, part2, diff, releaseDate } =
+                    member.dailyResults[Number(day)];
 
                   return (
                     <TableRow key={day}>
                       <TableCell>{day}</TableCell>
                       <TableCell>
                         {part1?.time
-                          ? localTimeFromSeconds(part1.time, day) +
+                          ? localTimeFromSeconds(part1.time, releaseDate) +
                             ` (${part1.score}p, ${part1.rank})`
                           : "-"}
                       </TableCell>
                       <TableCell>
-                        {part1?.time && part2?.time
-                          ? lengthInTimeFromSeconds(part2.time - part1.time)
-                          : "-"}
+                        {diff.time ? lengthInTimeFromSeconds(diff.time) : "-"}
                       </TableCell>
                       <TableCell>
                         {part2?.time
-                          ? localTimeFromSeconds(part2.time, day) +
+                          ? localTimeFromSeconds(part2.time, releaseDate) +
                             ` (${part2.score}p, ${part2.rank})`
                           : "-"}
                       </TableCell>

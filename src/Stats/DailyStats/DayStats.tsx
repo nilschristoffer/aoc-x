@@ -36,7 +36,7 @@ const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
     <Accordion expanded={isExpanded} TransitionProps={{ mountOnEnter: true }}>
       <AccordionSummary onClick={handleClick}>
         <Stack direction="row" spacing={2} alignItems="center">
-          <Typography sx={{ mr: 2 }}>Dag {day}</Typography>
+          <Typography>Dag {day}</Typography>
           <Stack direction="row" spacing={0} flexWrap="wrap">
             {countPart2Completions.map((i) => (
               <Tooltip key={i} title={i}>
@@ -61,7 +61,9 @@ const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
           <Grid item xs={1}>
             <DailyTable
               data={dayScore.part1}
-              timeConverter={(t) => localTimeFromSeconds(t, day)}
+              timeConverter={(t) =>
+                localTimeFromSeconds(t, dayScore.releaseDate)
+              }
               heading={
                 <>
                   <Star color="primary" />
@@ -85,7 +87,9 @@ const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
           <Grid item xs={1}>
             <DailyTable
               data={dayScore.part2}
-              timeConverter={(t) => localTimeFromSeconds(t, day)}
+              timeConverter={(t) =>
+                localTimeFromSeconds(t, dayScore.releaseDate)
+              }
               heading={
                 <>
                   <Star color="primary" />
