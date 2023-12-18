@@ -25,8 +25,8 @@ const DataModal: React.FunctionComponent = () => {
   const [jsonData, setJsonData] = React.useState("");
   const [error, setError] = React.useState("");
 
-  const { setLeaderboard, leaderboard } = useAdventOfCodeJson();
-  const [open, setOpen] = React.useState(!leaderboard);
+  const { setLeaderboard } = useAdventOfCodeJson();
+  const [open, setOpen] = React.useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
