@@ -158,3 +158,14 @@ export const getDailyScores = (leaderboard: ApiLeaderboard): DailyScores => {
 
   return dailyScores;
 };
+
+export const getOrderSuffix = (order: number) => {
+  if (order === 11) return order + "th";
+  if (order === 12) return order + "th";
+  if (order === 13) return order + "th";
+  if (order % 10 === 1) return order + "st";
+  if (order % 10 === 2) return order + "nd";
+  if (order % 10 === 3) return order + "rd";
+
+  return order + "th";
+};

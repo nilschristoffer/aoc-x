@@ -27,12 +27,12 @@ const MemberCard: React.FunctionComponent<IMemberCardProps> = ({
     setIsExpanded((prev) => !prev);
   };
 
-  const secondStarDays = Object.values(member.dailyResults).map(
-    (day) => day.part2.time
+  const secondStarDays = Object.entries(member.dailyResults).map(([key, val]) =>
+    val.part2.time ? Number(key) : null
   );
 
-  const firstStarDays = Object.values(member.dailyResults).map(
-    (day) => day.part1.time && !day.part2.time
+  const firstStarDays = Object.entries(member.dailyResults).map(([key, val]) =>
+    val.part1.time && !val.part2.time ? Number(key) : null
   );
 
   return (
@@ -50,9 +50,9 @@ const MemberCard: React.FunctionComponent<IMemberCardProps> = ({
         <Stack direction="row" spacing={0} alignItems="center" flexWrap="wrap">
           {Array.from({ length: 25 }, (_, i) => i + 1).map((day) => (
             <Tooltip key={day} title={`Day ${day}`}>
-              {secondStarDays[day - 1] ? (
+              {secondStarDays.includes(day) ? (
                 <Star fontSize="small" color="primary" />
-              ) : firstStarDays[day - 1] ? (
+              ) : firstStarDays.includes(day) ? (
                 <Star fontSize="small" color="inherit" />
               ) : (
                 <Star fontSize="small" color="disabled" />
