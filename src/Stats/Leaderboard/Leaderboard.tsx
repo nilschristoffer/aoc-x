@@ -9,7 +9,7 @@ const Leaderboard: React.FunctionComponent = () => {
   const [top, setTop] = React.useState(10);
 
   if (!members.length) {
-    return <p>Ingen data...</p>;
+    return <p>Kan inte ladda leaderboard</p>;
   }
 
   return (
