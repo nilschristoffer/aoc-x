@@ -1,4 +1,8 @@
-import { DailyScores, MemberScorePerDay } from "./AdventOfCodeContext";
+import {
+  AccScoreAndRankPerMember,
+  DailyScores,
+  MemberScorePerDay,
+} from "./AdventOfCodeContext";
 import { ApiLeaderboard } from "./apiType";
 
 export const localTimeFromSeconds = (seconds: number, referenceDate: Date) => {
@@ -52,6 +56,7 @@ export const getMemberScorePerDay = (leaderboard: ApiLeaderboard) => {
       Array.from({ length: lastDate }, (_, i) => (i + 1).toString()).forEach(
         (day: string) => {
           const dayData = member.completion_day_level[day];
+          const prevDailyResults = acc[member.id].dailyResults[Number(day) - 1];
 
           if (!dayData) {
             acc[member.id].dailyResults[Number(day)] = {
@@ -74,6 +79,7 @@ export const getMemberScorePerDay = (leaderboard: ApiLeaderboard) => {
                 Number(leaderboard.event)
               ),
               dayScore: 0,
+              accScore: prevDailyResults ? prevDailyResults.accScore : 0,
             };
             return;
           }
@@ -117,6 +123,9 @@ export const getMemberScorePerDay = (leaderboard: ApiLeaderboard) => {
             },
             releaseDate: getReleaseDate(Number(day), Number(leaderboard.event)),
             dayScore,
+            accScore: prevDailyResults
+              ? prevDailyResults.accScore + dayScore
+              : dayScore,
           };
         }
       );
@@ -196,4 +205,62 @@ export const getOrderSuffix = (order: number) => {
   if (order % 10 === 3) return order + "rd";
 
   return order + "th";
+};
+
+export const getAccumalitiveScoresAndRanks = (
+  leaderboard: ApiLeaderboard
+): {
+  [day: number]: { memberId: number; accScore: number; rank: number }[];
+} => {
+  const memberScorePerDay = getMemberScorePerDay(leaderboard);
+  const lastDate =
+    Number(leaderboard.event) < new Date().getFullYear() ||
+    new Date().getMonth() + 1 < 12
+      ? 25
+      : new Date().getDate();
+
+  return Array.from({ length: lastDate }, (_, i) => (i + 1).toString()).reduce(
+    (acc, day) => {
+      const dailyResults = Object.values(memberScorePerDay).map(
+        (member) => [member.id, member.dailyResults[Number(day)]] as const
+      );
+      const dailyScores = dailyResults.map(([memberId, result]) => ({
+        memberId,
+        accScore: result.accScore,
+      }));
+      dailyScores.sort((a, b) => b.accScore - a.accScore);
+      const dailyScoresWithRank = dailyScores.map((score, index) => ({
+        ...score,
+        rank: index + 1,
+      }));
+      acc[Number(day)] = dailyScoresWithRank;
+      return acc;
+    },
+    {} as {
+      [day: number]: { memberId: number; accScore: number; rank: number }[];
+    }
+  );
+};
+
+export const getAccumalitiveScoresAndRanksPerMember = (
+  leaderboard: ApiLeaderboard
+): AccScoreAndRankPerMember => {
+  const accScoreAndRankPerMember: AccScoreAndRankPerMember = {};
+
+  const entries = Object.entries(getAccumalitiveScoresAndRanks(leaderboard));
+
+  entries.forEach(([day, dailyScores]) => {
+    dailyScores.forEach(({ memberId, accScore, rank }) => {
+      if (!accScoreAndRankPerMember[memberId]) {
+        accScoreAndRankPerMember[memberId] = [];
+      }
+      accScoreAndRankPerMember[memberId].push({
+        day: Number(day),
+        accScore,
+        rank,
+      });
+    });
+  });
+
+  return accScoreAndRankPerMember;
 };

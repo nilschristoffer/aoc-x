@@ -22,6 +22,7 @@ import {
 import { Member } from "../AdventOfCodeContext";
 
 import { BarChart } from "@mui/x-charts";
+import RankChart from "./RankChart";
 
 const CustomTableCell = styled(TableCell, {
   shouldForwardProp: (prop) => prop !== "golden",
@@ -162,6 +163,9 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
             },
           ]}
         />
+      </ListItem>
+      <ListItem>
+        <RankChart memberIds={[member]} />
       </ListItem>
     </List>
   );

@@ -6,7 +6,11 @@ import React, {
 } from "react";
 import { ApiLeaderboard } from "./apiType";
 import { useLocalStorage } from "./useLocalStorage";
-import { getDailyScores, getMemberScorePerDay } from "./helpers";
+import {
+  getAccumalitiveScoresAndRanksPerMember,
+  getDailyScores,
+  getMemberScorePerDay,
+} from "./helpers";
 
 export type MemberPartResult = {
   time?: number;
@@ -20,6 +24,7 @@ export type MemberDayResult = {
   diff: MemberPartResult;
   releaseDate: Date;
   dayScore: number;
+  accScore: number;
 };
 
 export type MemberDailyResults = {
@@ -60,11 +65,16 @@ type Owner = {
   name: string;
 };
 
+export type AccScoreAndRankPerMember = {
+  [member: number]: { day: number; rank: number; accScore: number }[];
+};
+
 const AdventOfCodeContext = createContext<{
   leaderboard: ApiLeaderboard | null;
   setLeaderboard: (leaderboard: ApiLeaderboard) => void;
   dailyScores: DailyScores;
   members: Member[];
+  accumulativeScoreAndRankPerMember: AccScoreAndRankPerMember;
   year?: number;
   owner?: Owner;
 }>({
@@ -72,6 +82,7 @@ const AdventOfCodeContext = createContext<{
   setLeaderboard: () => ({}),
   dailyScores: {},
   members: [],
+  accumulativeScoreAndRankPerMember: {},
 });
 
 export const AdventOfCodeContextProvider: React.FunctionComponent<
@@ -106,6 +117,12 @@ export const AdventOfCodeContextProvider: React.FunctionComponent<
       }
     : undefined;
 
+  const accumulativeScoreAndRankPerMember = useMemo(
+    () =>
+      leaderboard ? getAccumalitiveScoresAndRanksPerMember(leaderboard) : {},
+    [leaderboard]
+  );
+
   return (
     <AdventOfCodeContext.Provider
       value={{
@@ -113,6 +130,7 @@ export const AdventOfCodeContextProvider: React.FunctionComponent<
         setLeaderboard,
         dailyScores,
         members,
+        accumulativeScoreAndRankPerMember,
         year,
         owner,
       }}
