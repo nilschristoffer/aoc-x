@@ -7,8 +7,10 @@ import {
   Stack,
   Tab,
   Tabs,
+  Theme,
   Typography,
   styled,
+  useMediaQuery,
 } from "@mui/material";
 import { LeaderboardSharp, TodaySharp } from "@mui/icons-material";
 import Leaderboard from "./Leaderboard/Leaderboard";
@@ -35,6 +37,8 @@ const Home: React.FunctionComponent = () => {
   const containerRef = useRef(null);
   const [tab, setTab] = React.useState(0);
   const { owner, year } = useAdventOfCodeJson();
+
+  const isDesktop = useMediaQuery<Theme>((theme) => theme.breakpoints.up("sm"));
 
   return (
     <Stack component={Box} spacing={2} ref={containerRef}>
@@ -80,7 +84,7 @@ const Home: React.FunctionComponent = () => {
         <Tabs value={tab} textColor="secondary" indicatorColor="secondary">
           <CustomTab
             value={0}
-            label="Leaderboard"
+            label={isDesktop ? "Leaderboard" : undefined}
             onClick={() => setTab(0)}
             icon={<LeaderboardSharp />}
             iconPosition="start"
@@ -88,7 +92,7 @@ const Home: React.FunctionComponent = () => {
           />
           <CustomTab
             value={1}
-            label="Days"
+            label={isDesktop ? "Daily Stats" : undefined}
             onClick={() => setTab(1)}
             icon={<TodaySharp />}
             iconPosition="start"
