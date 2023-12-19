@@ -10,9 +10,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  Paper,
   styled,
-  Theme,
 } from "@mui/material";
 import { Star, Public, StarOutline } from "@mui/icons-material";
 import React from "react";
@@ -62,7 +60,7 @@ const MemberDetails: React.FunctionComponent<IMemberDetailsProps> = ({
         <ListItemText primary={member.globalScore} secondary={"Global score"} />
       </ListItem>
       <ListItem>
-        <TableContainer component={Paper}>
+        <TableContainer>
           <Table>
             <TableHead>
               <TableRow>

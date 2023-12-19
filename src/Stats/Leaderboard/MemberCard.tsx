@@ -1,10 +1,10 @@
 import React from "react";
 
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  Collapse,
   Stack,
+  TableCell,
+  TableRow,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -36,35 +36,51 @@ const MemberCard: React.FunctionComponent<IMemberCardProps> = ({
   );
 
   return (
-    <Accordion expanded={isExpanded} TransitionProps={{ mountOnEnter: true }}>
-      <AccordionSummary onClick={handleClick}>
-        <Typography sx={{ width: "30%", flexShrink: 0 }}>
-          {`${rank}. `}
-          {member.name}
-        </Typography>
-        <Typography
-          sx={{ color: "text.secondary", width: "20%", flexShrink: 0 }}
-        >
-          {member.localScore}
-        </Typography>
-        <Stack direction="row" spacing={0} alignItems="center" flexWrap="wrap">
-          {Array.from({ length: 25 }, (_, i) => i + 1).map((day) => (
-            <Tooltip key={day} title={`Day ${day}`}>
-              {secondStarDays.includes(day) ? (
-                <Star fontSize="small" color="primary" />
-              ) : firstStarDays.includes(day) ? (
-                <Star fontSize="small" color="inherit" />
-              ) : (
-                <Star fontSize="small" color="disabled" />
-              )}
-            </Tooltip>
-          ))}
-        </Stack>
-      </AccordionSummary>
-      <AccordionDetails>
-        <MemberDetails member={member} />
-      </AccordionDetails>
-    </Accordion>
+    <>
+      <TableRow
+        onClick={handleClick}
+        sx={{ "& > *": { borderBottom: "unset" }, cursor: "pointer" }}
+      >
+        <TableCell>
+          <Typography>
+            {`${rank}. `}
+            {member.name}
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Typography sx={{ color: "text.secondary" }}>
+            {member.localScore}
+          </Typography>
+        </TableCell>
+        <TableCell>
+          <Stack
+            direction="row"
+            spacing={0}
+            alignItems="center"
+            flexWrap="wrap"
+          >
+            {Array.from({ length: 25 }, (_, i) => i + 1).map((day) => (
+              <Tooltip key={day} title={`Day ${day}`}>
+                {secondStarDays.includes(day) ? (
+                  <Star fontSize="small" color="primary" />
+                ) : firstStarDays.includes(day) ? (
+                  <Star fontSize="small" color="inherit" />
+                ) : (
+                  <Star fontSize="small" color="disabled" />
+                )}
+              </Tooltip>
+            ))}
+          </Stack>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell colSpan={3} sx={{ pt: 0, pb: isExpanded ? 2 : 0 }}>
+          <Collapse in={isExpanded} timeout="auto" mountOnEnter unmountOnExit>
+            <MemberDetails member={member} />
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
   );
 };
 

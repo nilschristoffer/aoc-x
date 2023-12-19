@@ -26,9 +26,18 @@ export const lengthInTimeFromSeconds = (timeInSeconds: number) => {
   return `${daysString}${hoursString}${minutesString}${secondsString}`;
 };
 
+const getReleaseDate = (day: number, year: number) =>
+  new Date(year, 11, day, 5, 0, 0, 0);
+
 export const getMemberScorePerDay = (leaderboard: ApiLeaderboard) => {
   const dailyScores = getDailyScores(leaderboard);
   const numberOfMembers = Object.keys(leaderboard.members).length;
+  const lastDate =
+    Number(leaderboard.event) < new Date().getFullYear() ||
+    new Date().getMonth() + 1 < 12
+      ? 25
+      : new Date().getDate();
+
   const memberScorePerDay = Object.values(leaderboard.members).reduce(
     (acc, member) => {
       acc[member.id] = {
@@ -40,57 +49,77 @@ export const getMemberScorePerDay = (leaderboard: ApiLeaderboard) => {
         dailyResults: {},
       };
 
-      Object.keys(member.completion_day_level).forEach((day: string) => {
-        const dayData = member.completion_day_level[day];
-        const part1 = dayData["1"];
-        const part2 = dayData["2"];
+      Array.from({ length: lastDate }, (_, i) => (i + 1).toString()).forEach(
+        (day: string) => {
+          const dayData = member.completion_day_level[day];
 
-        const part1Time = part1?.get_star_ts;
-        const part2Time = part2?.get_star_ts;
+          if (!dayData) {
+            acc[member.id].dailyResults[Number(day)] = {
+              part1: {
+                time: undefined,
+                rank: undefined,
+                score: 0,
+              },
+              part2: {
+                time: undefined,
+                rank: undefined,
+                score: 0,
+              },
+              diff: {
+                time: undefined,
+                rank: undefined,
+              },
+              releaseDate: getReleaseDate(
+                Number(day),
+                Number(leaderboard.event)
+              ),
+              dayScore: 0,
+            };
+            return;
+          }
 
-        const part1Rank = dailyScores[day].part1.findIndex(
-          (score) => score.member.id === member.id
-        );
-        const part2Rank = dailyScores[day].part2.findIndex(
-          (score) => score.member.id === member.id
-        );
+          const part1 = dayData["1"];
+          const part2 = dayData["2"];
 
-        const diffRank = dailyScores[day].diff.findIndex(
-          (score) => score.member.id === member.id
-        );
+          const part1Time = part1?.get_star_ts;
+          const part2Time = part2?.get_star_ts;
 
-        const part1Score = part1Rank === -1 ? 0 : numberOfMembers - part1Rank;
-        const part2Score = part2Rank === -1 ? 0 : numberOfMembers - part2Rank;
+          const part1Rank = dailyScores[day].part1.findIndex(
+            (score) => score.member.id === member.id
+          );
+          const part2Rank = dailyScores[day].part2.findIndex(
+            (score) => score.member.id === member.id
+          );
 
-        const dayScore = part1Score + part2Score;
+          const diffRank = dailyScores[day].diff.findIndex(
+            (score) => score.member.id === member.id
+          );
 
-        acc[member.id].dailyResults[Number(day)] = {
-          part1: {
-            time: part1Time,
-            rank: part1Rank > -1 ? part1Rank + 1 : undefined,
-            score: part1Score,
-          },
-          part2: {
-            time: part2Time,
-            rank: part2Rank > -1 ? part2Rank + 1 : undefined,
-            score: part2Score,
-          },
-          diff: {
-            time: part2Time && part1Time ? part2Time - part1Time : undefined,
-            rank: diffRank > -1 ? diffRank + 1 : undefined,
-          },
-          releaseDate: new Date(
-            Number(leaderboard.event),
-            11,
-            Number(day),
-            5,
-            0,
-            0,
-            0
-          ),
-          dayScore,
-        };
-      });
+          const part1Score = part1Rank === -1 ? 0 : numberOfMembers - part1Rank;
+          const part2Score = part2Rank === -1 ? 0 : numberOfMembers - part2Rank;
+
+          const dayScore = part1Score + part2Score;
+
+          acc[member.id].dailyResults[Number(day)] = {
+            part1: {
+              time: part1Time,
+              rank: part1Rank > -1 ? part1Rank + 1 : undefined,
+              score: part1Score,
+            },
+            part2: {
+              time: part2Time,
+              rank: part2Rank > -1 ? part2Rank + 1 : undefined,
+              score: part2Score,
+            },
+            diff: {
+              time: part2Time && part1Time ? part2Time - part1Time : undefined,
+              rank: diffRank > -1 ? diffRank + 1 : undefined,
+            },
+            releaseDate: getReleaseDate(Number(day), Number(leaderboard.event)),
+            dayScore,
+          };
+        }
+      );
 
       return acc;
     },

@@ -3,7 +3,7 @@ import React from "react";
 import ScoreTable from "./ScoreTable";
 
 import { PartScore } from "../AdventOfCodeContext";
-import { ExpandMore } from "@mui/icons-material";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
 
 interface IProps {
   data: PartScore[];
@@ -21,12 +21,22 @@ const DailyTable = ({ data, timeConverter, heading }: IProps) => {
       <Stack spacing={1} alignItems="center">
         <Typography>{heading}</Typography>
         <ScoreTable data={topMembers} timeConverter={timeConverter} />
-        <IconButton
-          onClick={() => setTop((prev) => prev + 10)}
-          disabled={top >= data.length}
-        >
-          <ExpandMore />
-        </IconButton>
+        <Stack direction="row" spacing={0} alignItems="center">
+          <IconButton
+            onClick={() => setTop((prev) => prev + 10)}
+            disabled={top >= data.length}
+            color="secondary"
+          >
+            <ExpandMore />
+          </IconButton>
+          <IconButton
+            onClick={() => setTop(10)}
+            disabled={top <= 10}
+            color="secondary"
+          >
+            <ExpandLess />
+          </IconButton>
+        </Stack>
       </Stack>
     </Paper>
   );

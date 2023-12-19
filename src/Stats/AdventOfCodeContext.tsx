@@ -55,12 +55,18 @@ export type DailyScores = {
   [day: string]: DayScore;
 };
 
+type Owner = {
+  memberId: number;
+  name: string;
+};
+
 const AdventOfCodeContext = createContext<{
   leaderboard: ApiLeaderboard | null;
   setLeaderboard: (leaderboard: ApiLeaderboard) => void;
   dailyScores: DailyScores;
   members: Member[];
   year?: number;
+  owner?: Owner;
 }>({
   leaderboard: null,
   setLeaderboard: () => ({}),
@@ -91,6 +97,15 @@ export const AdventOfCodeContextProvider: React.FunctionComponent<
 
   const year = leaderboard?.event ? Number(leaderboard?.event) : undefined;
 
+  const owner: Owner | undefined = leaderboard
+    ? {
+        memberId: leaderboard.owner_id,
+        name:
+          leaderboard["members"][leaderboard.owner_id].name ??
+          `Anonymous ${leaderboard.owner_id}`,
+      }
+    : undefined;
+
   return (
     <AdventOfCodeContext.Provider
       value={{
@@ -99,6 +114,7 @@ export const AdventOfCodeContextProvider: React.FunctionComponent<
         dailyScores,
         members,
         year,
+        owner,
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import { Stack, Button } from "@mui/material";
+import { Button, Table, TableFooter } from "@mui/material";
 import React from "react";
 
 import { useAdventOfCodeJson } from "../AdventOfCodeContext";
@@ -13,18 +13,21 @@ const Leaderboard: React.FunctionComponent = () => {
   }
 
   return (
-    <Stack spacing={0}>
+    <Table>
       {members.slice(0, top).map((member, index) => (
         <MemberCard key={member.id} member={member} rank={index + 1} />
       ))}
-      <Button
-        onClick={() => setTop((prev) => prev + 10)}
-        disabled={top >= members.length}
-        sx={{ mt: 1 }}
-      >
-        Show more
-      </Button>
-    </Stack>
+      <TableFooter>
+        <Button
+          onClick={() => setTop((prev) => prev + 10)}
+          disabled={top >= members.length}
+          sx={{ mt: 1 }}
+          color="secondary"
+        >
+          Show more
+        </Button>
+      </TableFooter>
+    </Table>
   );
 };
 

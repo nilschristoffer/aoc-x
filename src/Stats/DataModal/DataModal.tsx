@@ -3,15 +3,17 @@ import React from "react";
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
   Stack,
   TextField,
 } from "@mui/material";
 import { ApiLeaderboard } from "../apiType";
 import { useAdventOfCodeJson } from "../AdventOfCodeContext";
-import { DataObject } from "@mui/icons-material";
+import { Clear, DataObject } from "@mui/icons-material";
 
 const verifiedJSONData = (jsonData: string) => {
   try {
@@ -23,10 +25,9 @@ const verifiedJSONData = (jsonData: string) => {
 };
 
 const DataModal: React.FunctionComponent = () => {
-  const [jsonData, setJsonData] = React.useState("");
-  const [error, setError] = React.useState("");
-
   const { setLeaderboard, leaderboard } = useAdventOfCodeJson();
+  const [jsonData, setJsonData] = React.useState(JSON.stringify(leaderboard));
+  const [error, setError] = React.useState("");
   const [open, setOpen] = React.useState(!leaderboard);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +55,12 @@ const DataModal: React.FunctionComponent = () => {
   return (
     <>
       <Button
-        variant="outlined"
-        color="primary"
         onClick={handleOpen}
         startIcon={<DataObject />}
-        sx={{ borderRadius: 0 }}
+        color="secondary"
+        sx={{
+          color: "secondary.light",
+        }}
       >
         Import JSON
       </Button>
@@ -69,17 +71,26 @@ const DataModal: React.FunctionComponent = () => {
         aria-describedby="modal-modal-description"
         maxWidth="lg"
         fullWidth
+        PaperProps={{
+          sx: {
+            bgcolor: "background.default",
+            backgroundImage: "unset",
+          },
+        }}
       >
-        <DialogTitle>Paste JSON</DialogTitle>
+        <DialogTitle color="secondary" sx={{ textShadow: "0 0 5px" }}>
+          Paste JSON
+        </DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
             <DialogContentText sx={{ wordBreak: "break-word" }}>
               {
-                "https://adventofcode.com/2023/leaderboard/private/view/{id}.json"
+                "https://adventofcode.com/{year}/leaderboard/private/view/{id}.json"
               }
             </DialogContentText>
             <TextField
               value={jsonData}
+              color="secondary"
               onChange={handleChange}
               label={"JSON"}
               multiline
@@ -88,12 +99,24 @@ const DataModal: React.FunctionComponent = () => {
               helperText={error}
               fullWidth
               margin="normal"
+              InputProps={{
+                endAdornment: jsonData ? (
+                  <IconButton color="secondary" onClick={() => setJsonData("")}>
+                    <Clear />
+                  </IconButton>
+                ) : undefined,
+              }}
             ></TextField>
-            <Button onClick={onSubmit} color="primary" fullWidth>
-              LOAD
-            </Button>
           </Stack>
         </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="inherit">
+            Cancel
+          </Button>
+          <Button onClick={onSubmit} color="secondary">
+            Submit
+          </Button>
+        </DialogActions>
       </Dialog>
     </>
   );

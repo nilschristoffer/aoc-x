@@ -8,7 +8,9 @@ export const theme = createTheme({
       main: "#ffff66",
     },
     secondary: {
+      light: "#00cc00",
       main: "#009900",
+      dark: "#006600",
     },
     background: {
       default: "#0f0f23",
@@ -20,9 +22,27 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: ["Source Code Pro", "monospace"].join(","),
+    fontFamily: ["Source Code Pro"].join(","),
   },
   shape: {
     borderRadius: 0,
+  },
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          ":hover": {
+            backgroundColor: "transparent !important",
+            textShadow: "0 0 5px",
+            "& svg": {
+              filter: "drop-shadow(0 0 5px)",
+            },
+          },
+        },
+      },
+    },
   },
 });

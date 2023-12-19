@@ -1,9 +1,9 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  Collapse,
   Grid,
   Stack,
+  TableCell,
+  TableRow,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -33,14 +33,15 @@ const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
     .map((p) => p.member.name);
 
   return (
-    <Accordion
-      expanded={isExpanded}
-      TransitionProps={{ mountOnEnter: true }}
-      disabled={!dayScore.part1.length}
-    >
-      <AccordionSummary onClick={handleClick}>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Typography>Day {day}</Typography>
+    <>
+      <TableRow
+        onClick={handleClick}
+        sx={{ "& > *": { borderBottom: "unset" }, cursor: "pointer" }}
+      >
+        <TableCell>
+          <Typography sx={{ minWidth: 60 }}>Day {day}</Typography>
+        </TableCell>
+        <TableCell align="left">
           <Stack direction="row" spacing={0} flexWrap="wrap">
             {countPart2Completions.map((i) => (
               <Tooltip key={i} title={i}>
@@ -53,58 +54,62 @@ const DayStats: React.FC<IProps> = ({ dayScore, day }) => {
               </Tooltip>
             ))}
           </Stack>
-        </Stack>
-      </AccordionSummary>
-      <AccordionDetails>
-        <Grid
-          container
-          columns={{ xs: 1, md: 3 }}
-          spacing={2}
-          direction={{ md: "row" }}
-        >
-          <Grid item xs={1}>
-            <DailyTable
-              data={dayScore.part1}
-              timeConverter={(t) =>
-                localTimeFromSeconds(t, dayScore.releaseDate)
-              }
-              heading={
-                <>
-                  <Star color="primary" />
-                  <StarBorder color="primary" />
-                </>
-              }
-            />
-          </Grid>
-          <Grid item xs={1}>
-            <DailyTable
-              data={dayScore.diff}
-              timeConverter={(t) => lengthInTimeFromSeconds(t)}
-              heading={
-                <>
-                  <StarBorder color="primary" />
-                  <Star color="primary" />
-                </>
-              }
-            />
-          </Grid>
-          <Grid item xs={1}>
-            <DailyTable
-              data={dayScore.part2}
-              timeConverter={(t) =>
-                localTimeFromSeconds(t, dayScore.releaseDate)
-              }
-              heading={
-                <>
-                  <Star color="primary" />
-                  <Star color="primary" />
-                </>
-              }
-            />
-          </Grid>
-        </Grid>
-      </AccordionDetails>
-    </Accordion>
+        </TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell colSpan={2} sx={{ pt: 0, pb: isExpanded ? 2 : 0 }}>
+          <Collapse in={isExpanded} timeout="auto" mountOnEnter unmountOnExit>
+            <Grid
+              container
+              columns={{ xs: 1, sm: 1, md: 2, lg: 3 }}
+              spacing={2}
+              direction={{ md: "row" }}
+            >
+              <Grid item xs={1}>
+                <DailyTable
+                  data={dayScore.part1}
+                  timeConverter={(t) =>
+                    localTimeFromSeconds(t, dayScore.releaseDate)
+                  }
+                  heading={
+                    <>
+                      <Star color="primary" />
+                      <StarBorder color="primary" />
+                    </>
+                  }
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <DailyTable
+                  data={dayScore.diff}
+                  timeConverter={(t) => lengthInTimeFromSeconds(t)}
+                  heading={
+                    <>
+                      <StarBorder color="primary" />
+                      <Star color="primary" />
+                    </>
+                  }
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <DailyTable
+                  data={dayScore.part2}
+                  timeConverter={(t) =>
+                    localTimeFromSeconds(t, dayScore.releaseDate)
+                  }
+                  heading={
+                    <>
+                      <Star color="primary" />
+                      <Star color="primary" />
+                    </>
+                  }
+                />
+              </Grid>
+            </Grid>
+          </Collapse>
+        </TableCell>
+      </TableRow>
+    </>
   );
 };
 
