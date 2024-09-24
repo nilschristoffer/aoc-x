@@ -40,7 +40,7 @@ export const getMemberScorePerDay = (leaderboard: ApiLeaderboard) => {
     Number(leaderboard.event) < new Date().getFullYear() ||
     new Date().getMonth() + 1 < 12
       ? 25
-      : new Date().getDate();
+      : Math.min(new Date().getDate(), 25);
 
   const memberScorePerDay = Object.values(leaderboard.members).reduce(
     (acc, member) => {
@@ -217,7 +217,7 @@ export const getAccumalitiveScoresAndRanks = (
     Number(leaderboard.event) < new Date().getFullYear() ||
     new Date().getMonth() + 1 < 12
       ? 25
-      : new Date().getDate();
+      : Math.min(new Date().getDate(), 25);
 
   return Array.from({ length: lastDate }, (_, i) => (i + 1).toString()).reduce(
     (acc, day) => {
@@ -226,7 +226,7 @@ export const getAccumalitiveScoresAndRanks = (
       );
       const dailyScores = dailyResults.map(([memberId, result]) => ({
         memberId,
-        accScore: result.accScore,
+        accScore: result?.accScore,
       }));
       dailyScores.sort((a, b) => b.accScore - a.accScore);
       const dailyScoresWithRank = dailyScores.map((score, index) => ({
