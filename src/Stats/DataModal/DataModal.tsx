@@ -1,6 +1,8 @@
 import React from "react";
 
 import {
+  Alert,
+  AlertTitle,
   Button,
   Dialog,
   DialogActions,
@@ -13,7 +15,8 @@ import {
 } from "@mui/material";
 import { ApiLeaderboard } from "../apiType";
 import { useAdventOfCodeJson } from "../AdventOfCodeContext";
-import { Clear, DataObject } from "@mui/icons-material";
+import { Clear, CookieSharp, DataObject } from "@mui/icons-material";
+import { hasAllowedLs, setAllowedLs } from "../useLocalStorage";
 
 const verifiedJSONData = (jsonData: string) => {
   try {
@@ -29,6 +32,7 @@ const DataModal: React.FunctionComponent = () => {
   const [jsonData, setJsonData] = React.useState(JSON.stringify(leaderboard));
   const [error, setError] = React.useState("");
   const [open, setOpen] = React.useState(!leaderboard);
+  const [hasAllowedCookies, setHasAllowedCookies] = React.useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -50,6 +54,11 @@ const DataModal: React.FunctionComponent = () => {
     } else {
       setError("Invalid JSON");
     }
+  };
+
+  const handleAllowCookies = () => {
+    setAllowedLs();
+    setHasAllowedCookies(true);
   };
 
   return (
@@ -83,6 +92,30 @@ const DataModal: React.FunctionComponent = () => {
         </DialogTitle>
         <DialogContent>
           <Stack spacing={2}>
+            {!hasAllowedLs() && !hasAllowedCookies && (
+              <Alert
+                severity="warning"
+                icon={<CookieSharp />}
+                sx={{
+                  alignItems: "center",
+                }}
+                action={
+                  <Button
+                    color="inherit"
+                    size="small"
+                    onClick={handleAllowCookies}
+                  >
+                    Allow
+                  </Button>
+                }
+              >
+                <AlertTitle>Allow cookies?</AlertTitle>
+                By storing the provided JSON in your browser's local storage,
+                you allow us to store the data you provide, so you don't need to
+                import it every time you visit the site. And thats actually the
+                only thing we store, no tracking, no ads, no bullshit.
+              </Alert>
+            )}
             <DialogContentText sx={{ wordBreak: "break-word" }}>
               {
                 "https://adventofcode.com/{year}/leaderboard/private/view/{id}.json"
