@@ -122,6 +122,7 @@ const DataModal: React.FunctionComponent = () => {
               <Link
                 href={`https://adventofcode.com/${leaderboard.event}/leaderboard/private/view/${leaderboard.owner_id}.json`}
                 target="_blank"
+                color="secondary"
               >
                 Go to current imported leaderboard with updated data
               </Link>
