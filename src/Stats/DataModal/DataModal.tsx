@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
+  Link,
   Stack,
   TextField,
 } from "@mui/material";
@@ -116,11 +117,22 @@ const DataModal: React.FunctionComponent = () => {
                 only thing we store, no tracking, no ads, no bullshit.
               </Alert>
             )}
-            <DialogContentText sx={{ wordBreak: "break-word" }}>
-              {
-                "https://adventofcode.com/{year}/leaderboard/private/view/{id}.json"
-              }
-            </DialogContentText>
+
+            {leaderboard ? (
+              <Link
+                href={`https://adventofcode.com/${leaderboard.event}/leaderboard/private/view/${leaderboard.owner_id}.json`}
+                target="_blank"
+              >
+                Här hittar du en uppdaterad version av din nuvarande
+                leaderboard!
+              </Link>
+            ) : (
+              <DialogContentText sx={{ wordBreak: "break-word" }}>
+                {
+                  "https://adventofcode.com/{year}/leaderboard/private/view/{id}.json"
+                }
+              </DialogContentText>
+            )}
             <TextField
               value={jsonData}
               color="secondary"
