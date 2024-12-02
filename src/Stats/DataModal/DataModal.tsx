@@ -123,8 +123,7 @@ const DataModal: React.FunctionComponent = () => {
                 href={`https://adventofcode.com/${leaderboard.event}/leaderboard/private/view/${leaderboard.owner_id}.json`}
                 target="_blank"
               >
-                Här hittar du en uppdaterad version av din nuvarande
-                leaderboard!
+                Go to current imported leaderboard with updated data
               </Link>
             ) : (
               <DialogContentText sx={{ wordBreak: "break-word" }}>
