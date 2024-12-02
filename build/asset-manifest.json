@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/aoc-x/static/css/main.e6c13ad2.css",
+    "main.js": "/aoc-x/static/js/main.8af4ab2d.js",
+    "static/js/787.4b9b9115.chunk.js": "/aoc-x/static/js/787.4b9b9115.chunk.js",
+    "index.html": "/aoc-x/index.html",
+    "main.e6c13ad2.css.map": "/aoc-x/static/css/main.e6c13ad2.css.map",
+    "main.8af4ab2d.js.map": "/aoc-x/static/js/main.8af4ab2d.js.map",
+    "787.4b9b9115.chunk.js.map": "/aoc-x/static/js/787.4b9b9115.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.8af4ab2d.js"
+  ]
+}
